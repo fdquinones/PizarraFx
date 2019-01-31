@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="warn">
+  <Appenders>
+    <Console name="STDOUT" target="SYSTEM_OUT">
+      <PatternLayout pattern="%highlight{[%-5level] - [%t] - .%c{1}: %msg%n}"/>
+    </Console>
+    <File name="FILE" fileName="logs/Pizarra.log">
+      <PatternLayout>
+        <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+      </PatternLayout>
+    </File>
+  </Appenders>
+  <Loggers>
+    <Root level="INFO">
+      <AppenderRef ref="FILE" level="INFO"/>
+      <AppenderRef ref="STDOUT" level="INFO"/>
+    </Root>
+	<Logger name="org.jgroups" level="WARN">
+		 <AppenderRef ref="STDOUT" level="WARN"/>
+		 <AppenderRef ref="FILE" level="ALL"/>
+	</Logger>
+	<Logger name="org.jgroups.protocols.raft.RAFT"     level="ALL">
+		<AppenderRef ref="STDOUT" level="DEBUG"/>
+		<AppenderRef ref="FILE" level="ALL"/>
+	</Logger>
+	<Logger name="org.jgroups.protocols.raft.ELECTION" level="ALL">
+		<AppenderRef ref="FILE" level="ALL"/>
+	</Logger>
+  </Loggers>
+</Configuration>

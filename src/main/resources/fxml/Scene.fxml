@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" maxHeight="Infinity" maxWidth="Infinity" prefHeight="632" prefWidth="725" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utpl.pizarrafx.FXMLController">
+    <children>
+        <BorderPane fx:id="borderPane">
+            <top>
+                <VBox fx:id="top" prefHeight="135.0">
+                    <children>
+                        <HBox fx:id="hboxNodes" prefHeight="50.0" prefWidth="725" spacing="10">
+                            <padding>
+                                <Insets bottom="20" left="40" right="40" top="20" />
+                            </padding>
+                        </HBox>
+                        <HBox id="topControls" fx:id="topControls" prefHeight="85.0" prefWidth="725">
+                            <children>
+                                <VBox id="widthPanel" fx:id="widthPanel" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                    <children>
+                                        <Label id="widthLabel" fx:id="widthLabel" text="Width: " />
+                                        <Slider id="widthSlider" fx:id="widthSlider" min="0.1" />
+                                    </children>
+                                </VBox>
+                                <GridPane id="colorPalette">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Label id="backLabel" fx:id="backLabel" text="Background" />
+                                        <ColorPicker id="backColorPicker" fx:id="backColorPicker" onAction="#updateBackgroundToCanvas" prefWidth="103.0" GridPane.rowIndex="1" />
+                                    </children>
+                                </GridPane>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>    
+            </top>
+            <center>
+                <Canvas fx:id="canvasPane" height="450.0" onMouseMoved="#updateLocationFromCanvas" onScroll="#updateSliderFromCanvas" width="725.0" />
+            </center>
+            <bottom>
+                <HBox fx:id="bottom" alignment="TOP_CENTER" prefHeight="50">
+                    <children>
+                        <HBox fx:id="zoomPanel">
+                            <children>
+                                <Slider fx:id="zoomSlider" />
+                                <Label fx:id="zoomLabel" text="Zoom: 100%" textFill="#306090" />
+                            </children>
+                        </HBox>
+                        <Region fx:id="spacerL" />
+                        <Label fx:id="statusRaftLbl" text="Estado actual: ∞" textFill="#306090" />
+                        <Region fx:id="spacerR" />
+                        <HBox fx:id="locationPanel" prefHeight="50.0">
+                            <children>
+                                <Label fx:id="locationLbl" text="Location: (X: 0, Y: 0)" />
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+            </bottom>
+        </BorderPane>
+    </children>
+</AnchorPane>
