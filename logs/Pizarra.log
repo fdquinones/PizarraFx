@@ -22651,3 +22651,15 @@
 2019-01-30 11:16:20,478 FATAL e.u.p.MainApp [JavaFX Application Thread] This will be printed on fatal
 2019-01-30 11:16:20,480 INFO e.u.p.MainApp [JavaFX Application Thread] Appending string: Hello, World.
 2019-01-30 11:16:21,199 INFO e.u.p.g.GuiceModule [JavaFX Application Thread] Inicializando el modulo de injeccion
+2019-01-31 18:06:36,111 INFO e.u.p.MainApp [JavaFX Application Thread] This will be printed on info
+2019-01-31 18:06:36,162 WARN e.u.p.MainApp [JavaFX Application Thread] This will be printed on warn
+2019-01-31 18:06:36,163 ERROR e.u.p.MainApp [JavaFX Application Thread] This will be printed on error
+2019-01-31 18:06:36,166 FATAL e.u.p.MainApp [JavaFX Application Thread] This will be printed on fatal
+2019-01-31 18:06:36,171 INFO e.u.p.MainApp [JavaFX Application Thread] Appending string: Hello, World.
+2019-01-31 18:06:36,422 INFO e.u.p.g.GuiceModule [JavaFX Application Thread] Inicializando el modulo de injeccion
+2019-01-31 21:01:30,078 INFO e.u.p.MainApp [JavaFX Application Thread] This will be printed on info
+2019-01-31 21:01:30,086 WARN e.u.p.MainApp [JavaFX Application Thread] This will be printed on warn
+2019-01-31 21:01:30,087 ERROR e.u.p.MainApp [JavaFX Application Thread] This will be printed on error
+2019-01-31 21:01:30,088 FATAL e.u.p.MainApp [JavaFX Application Thread] This will be printed on fatal
+2019-01-31 21:01:30,093 INFO e.u.p.MainApp [JavaFX Application Thread] Appending string: Hello, World.
+2019-01-31 21:01:30,358 INFO e.u.p.g.GuiceModule [JavaFX Application Thread] Inicializando el modulo de injeccion

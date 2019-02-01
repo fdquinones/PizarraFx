@@ -2,9 +2,11 @@ package edu.utpl.pizarrafx;
 
 import com.google.common.eventbus.Subscribe;
 import edu.utpl.pizarrafx.event.RoleEvent;
+import edu.utpl.pizarrafx.event.ShapeEvent;
 import edu.utpl.pizarrafx.guice.FxmlLoaderService;
 import edu.utpl.pizarrafx.models.ButtonNode;
 import edu.utpl.pizarrafx.models.Config;
+import edu.utpl.pizarrafx.models.ShapeLine;
 import edu.utpl.pizarrafx.properties.Defaults;
 import edu.utpl.pizarrafx.properties.Properties;
 import edu.utpl.pizarrafx.raft.RaftNode;
@@ -117,7 +119,6 @@ public class FXMLController implements Initializable {
 
         GraphicsContext gc;
         gc = canvasPane.getGraphicsContext2D();
-        
 
         Line line = new Line();
         canvasPane.setOnMousePressed(e -> {
@@ -126,8 +127,8 @@ public class FXMLController implements Initializable {
             line.setStartX(e.getX());
             line.setStartY(e.getY());
         });
-
-        /*canvas.setOnMouseDragged(e->{
+        /*
+        canvas.setOnMouseDragged(e->{
             if(drowbtn.isSelected()) {
                 gc.lineTo(e.getX(), e.getY());
                 gc.stroke();
@@ -136,17 +137,24 @@ public class FXMLController implements Initializable {
                 double lineWidth = gc.getLineWidth();
                 gc.clearRect(e.getX() - lineWidth / 2, e.getY() - lineWidth / 2, lineWidth, lineWidth);
             }
-        });
+        });*/
         canvasPane.setOnMouseReleased(e -> {
             line.setEndX(e.getX());
             line.setEndY(e.getY());
             gc.strokeLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
 
-            //este paso deberia enviarse a consensuar antes de guardar
-            //undoHistory.push(new Line(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY()));
+            try {
+                this._raftNode.put("Linea",
+                        new ShapeLine(Color.BLACK.hashCode(),
+                                line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), Properties.getWidth()));
+
+                //este paso deberia enviarse a consensuar antes de guardar
+                //undoHistory.push(new Line(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY()));
+            } catch (Exception ex) {
+                Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
-        
-        */
+
     }
 
     @FXML
@@ -187,6 +195,14 @@ public class FXMLController implements Initializable {
                         //coregir donde presentar el estado actual del nodo RAFT
                     }
             );
+        }
+    }
+
+    @Subscribe
+    public void changedShape(final ShapeEvent evt) {
+        if (evt != null) {
+            LOG.info("Se agrego un shape desde el bus: ");
+
         }
     }
 

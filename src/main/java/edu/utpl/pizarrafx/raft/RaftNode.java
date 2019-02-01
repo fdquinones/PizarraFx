@@ -7,6 +7,8 @@ package edu.utpl.pizarrafx.raft;
 
 import com.google.common.eventbus.EventBus;
 import edu.utpl.pizarrafx.event.RoleEvent;
+import edu.utpl.pizarrafx.event.ShapeEvent;
+import edu.utpl.pizarrafx.models.ShapeLine;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -25,7 +27,7 @@ import org.jgroups.protocols.raft.Role;
  */
 public class RaftNode {
 
-    private ReplicatedStateMachine<String, String> rsm;
+    private ReplicatedStateMachine<String, ShapeLine> rsm;
     private static final Logger LOG = LogManager.getLogger(RaftNode.class);
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final EventBus _eventBus;
@@ -52,9 +54,13 @@ public class RaftNode {
                 @Override
                 public void put(Object k, Object v, Object v1) {
                     LOG.debug("Campo agregado");
-                    LOG.info("Campo agregado: {}:{}", k.toString(), v.toString());
-                    _eventBus.post("Campo agregado");
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    LOG.info("Campo agregado: {}", k.toString());
+                    ShapeLine shape = (v instanceof ShapeLine ? (ShapeLine)v : null);
+                    //ShapeLine shape = ShapeLine.class.cast(v);
+                    if(shape != null){
+                        _eventBus.post(new ShapeEvent( shape));
+                    }
+                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
 
                 @Override
@@ -74,11 +80,11 @@ public class RaftNode {
         });
     }
 
-    public String get(String key) {
+    public ShapeLine get(String key) {
         return rsm.get(key);
     }
 
-    public void put(String key, String value) throws Exception {
+    public void put(String key, ShapeLine value) throws Exception {
         rsm.put(key, value);
     }
 
