@@ -65,7 +65,8 @@ public class RaftNode {
 
                 @Override
                 public void remove(Object k, Object v) {
-                    LOG.debug("Campo removido");
+                    LOG.info("Campo removido por consenso");
+                    LOG.debug("Campo removido por consenso");
                     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
             });

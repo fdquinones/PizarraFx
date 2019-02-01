@@ -103,6 +103,7 @@ public class FXMLController implements Initializable {
     //atributos propios para el canvas
     private double locationX = 0.0;
     private double locationY = 0.0;
+    private GraphicsContext gc;
 
     @Inject
     public FXMLController(final FxmlLoaderService fxmlLoaderService, RaftNode raftNode) {
@@ -117,7 +118,6 @@ public class FXMLController implements Initializable {
         this.setupTop();
         this.setupBottom();
 
-        GraphicsContext gc;
         gc = canvasPane.getGraphicsContext2D();
 
         Line line = new Line();
@@ -147,9 +147,6 @@ public class FXMLController implements Initializable {
                 this._raftNode.put("Linea",
                         new ShapeLine(Color.BLACK.hashCode(),
                                 line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), Properties.getWidth()));
-
-                //este paso deberia enviarse a consensuar antes de guardar
-                //undoHistory.push(new Line(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY()));
             } catch (Exception ex) {
                 Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -158,9 +155,14 @@ public class FXMLController implements Initializable {
     }
 
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        //label.setText("Hello World!");
+    private void handleButtonClear(ActionEvent event) {
+        try {
+            System.out.println("Eliminando nodo");
+            this._raftNode.remove("Linea");
+        } catch (Exception ex) {
+            System.out.println("Error al eliminar: " + ex.getLocalizedMessage());
+            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
@@ -202,7 +204,15 @@ public class FXMLController implements Initializable {
     public void changedShape(final ShapeEvent evt) {
         if (evt != null) {
             LOG.info("Se agrego un shape desde el bus: ");
-
+            Platform.runLater(
+                    () -> {
+                        gc.setLineWidth(evt.getShape().getWidth());
+                        gc.setStroke(Color.grayRgb(evt.getShape().getColorRgb()));
+                        gc.strokeLine(evt.getShape().getStartX(), 
+                                evt.getShape().getStartY(), 
+                                evt.getShape().getEndX(), evt.getShape().getEndY());
+                    }
+            );
         }
     }
 

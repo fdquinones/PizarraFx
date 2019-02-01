@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
@@ -45,6 +46,7 @@
                                     <children>
                                         <Label id="backLabel" fx:id="backLabel" text="Background" />
                                         <ColorPicker id="backColorPicker" fx:id="backColorPicker" onAction="#updateBackgroundToCanvas" prefWidth="103.0" GridPane.rowIndex="1" />
+                              <Button id="btnClean" mnemonicParsing="false" onAction="#handleButtonClear" text="Clear all" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     </children>
                                 </GridPane>
                             </children>
@@ -65,7 +67,7 @@
                             </children>
                         </HBox>
                         <Region fx:id="spacerL" />
-                        <Label fx:id="statusRaftLbl" text="Estado actual: ∞" textFill="#306090" />
+                        <Label fx:id="statusRaftLbl" text="Estado actual: Follower" textFill="#306090" />
                         <Region fx:id="spacerR" />
                         <HBox fx:id="locationPanel" prefHeight="50.0">
                             <children>
