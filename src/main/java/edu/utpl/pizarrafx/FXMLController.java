@@ -1,6 +1,8 @@
 package edu.utpl.pizarrafx;
 
 import com.google.common.eventbus.Subscribe;
+import edu.utpl.pizarrafx.constant.CommandEnum;
+import edu.utpl.pizarrafx.event.CommandEvent;
 import edu.utpl.pizarrafx.event.RoleEvent;
 import edu.utpl.pizarrafx.event.ShapeEvent;
 import edu.utpl.pizarrafx.guice.FxmlLoaderService;
@@ -113,11 +115,12 @@ public class FXMLController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        LOG.debug("Prueba de inicio de escena");
-
+        LOG.info("Prueba de inicio de escena: {}", Color.BLACK.toString());
+        
         this.setupTop();
         this.setupBottom();
-
+        
+        canvasPane.setDisable(true);
         gc = canvasPane.getGraphicsContext2D();
 
         Line line = new Line();
@@ -145,7 +148,7 @@ public class FXMLController implements Initializable {
 
             try {
                 this._raftNode.put("Linea",
-                        new ShapeLine(Color.BLACK.hashCode(),
+                        new ShapeLine(Color.BLACK.toString(),
                                 line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), Properties.getWidth()));
             } catch (Exception ex) {
                 Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
@@ -189,8 +192,18 @@ public class FXMLController implements Initializable {
 
     @Subscribe
     public void changedRole(final RoleEvent evt) {
+        LOG.info("Cambio el rol desde el bus ");
         if (evt != null) {
             LOG.info("Cambio el rol desde el bus: " + evt.getRole().toString());
+            //si es el lider enviar un mensaje al resto
+            if(evt.isLeader()){
+                try {
+                    LOG.info("Leader notifica a todos que habiliten sus pantallas.");
+                    _raftNode.sendMessage(CommandEnum.HABILITAR_PANTALLA.getCommand());
+                } catch (Exception ex) {
+                    Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             Platform.runLater(
                     () -> {
                         statusRaftLbl.setText(TITLE_BASE + evt.getRole().toString());
@@ -207,10 +220,27 @@ public class FXMLController implements Initializable {
             Platform.runLater(
                     () -> {
                         gc.setLineWidth(evt.getShape().getWidth());
-                        gc.setStroke(Color.grayRgb(evt.getShape().getColorRgb()));
+                        gc.setStroke(Color.web(evt.getShape().getColorRgb(), 1));
                         gc.strokeLine(evt.getShape().getStartX(), 
                                 evt.getShape().getStartY(), 
                                 evt.getShape().getEndX(), evt.getShape().getEndY());
+                    }
+            );
+        }
+    }
+    
+    @Subscribe
+    public void changedCommand(final CommandEvent evt) {
+        if (evt != null) {
+            LOG.info("Se recivio un comando desde el bus: ");
+            Platform.runLater(
+                    () -> {
+                        switch(evt.getCommand()){
+                            case HABILITAR_PANTALLA:
+                                LOG.info("Habilitando pantalla en el nodo cliente.");
+                                canvasPane.setDisable(false);
+                                break;  
+                        }
                     }
             );
         }

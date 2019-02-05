@@ -16,14 +16,14 @@ import java.io.*;
  */
 
 public class ShapeLine implements Serializable {
-    private int ColorRgb;
+    private String ColorRgb;
     private double StartX;
     private double StartY;
     private double EndX;
     private double EndY;
     private double Width;
 
-    public ShapeLine(int ColorRgb, double StartX, double StartY, double EndX, double EndY, double Width) {
+    public ShapeLine(String ColorRgb, double StartX, double StartY, double EndX, double EndY, double Width) {
         this.ColorRgb = ColorRgb;
         this.StartX = StartX;
         this.StartY = StartY;
@@ -37,14 +37,14 @@ public class ShapeLine implements Serializable {
     /**
      * @return the ColorRgb
      */
-    public int getColorRgb() {
+    public String getColorRgb() {
         return ColorRgb;
     }
 
     /**
      * @param ColorRgb the ColorRgb to set
      */
-    public void setColorRgb(int ColorRgb) {
+    public void setColorRgb(String ColorRgb) {
         this.ColorRgb = ColorRgb;
     }
 
