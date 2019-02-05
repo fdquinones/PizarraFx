@@ -11,6 +11,8 @@ public class Defaults {
 
     public static final Color PEN_COLOR = Color.BLACK;
     public static final Color BG_COLOR = Color.WHITE;
+    
+    public static final Color BG_COLOR_LEADER = Color.rgb(249, 109, 102);
     public static final double WIDTH = 5.0;
 
 }

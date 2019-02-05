@@ -2,6 +2,7 @@ package edu.utpl.pizarrafx;
 
 import com.google.common.eventbus.Subscribe;
 import edu.utpl.pizarrafx.constant.CommandEnum;
+import edu.utpl.pizarrafx.constant.Utils;
 import edu.utpl.pizarrafx.event.CommandEvent;
 import edu.utpl.pizarrafx.event.RoleEvent;
 import edu.utpl.pizarrafx.event.ShapeEvent;
@@ -35,13 +36,11 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -102,7 +101,7 @@ public class FXMLController implements Initializable {
 
     @FXML
     private ColorPicker backColorPicker;
-    
+
     @FXML
     private ColorPicker foreColorPicker;
 
@@ -120,10 +119,16 @@ public class FXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         LOG.info("Prueba de inicio de escena: {}", Color.BLACK.toString());
-        
+
         this.setupTop();
         this.setupBottom();
-        
+        this.setupCanvas();
+    }
+
+    private void setupCanvas() {
+        //se establece un color aleatorio para cada pincel de canvas
+        foreColorPicker.setValue(Utils.getRamdomColor());
+        //por defecto se desabilita el panel hasta no tener un leader
         canvasPane.setDisable(true);
         gc = canvasPane.getGraphicsContext2D();
 
@@ -158,7 +163,6 @@ public class FXMLController implements Initializable {
                 Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-
     }
 
     @FXML
@@ -199,21 +203,25 @@ public class FXMLController implements Initializable {
         LOG.info("Cambio el rol desde el bus ");
         if (evt != null) {
             LOG.info("Cambio el rol desde el bus: " + evt.getRole().toString());
-            //si es el lider enviar un mensaje al resto
-            if(evt.isLeader()){
-                try {
-                    LOG.info("Leader notifica a todos que habiliten sus pantallas.");
-                    _raftNode.sendMessage(CommandEnum.HABILITAR_PANTALLA.getCommand());
-                } catch (Exception ex) {
-                    Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
             Platform.runLater(
                     () -> {
+                        if (evt.isLeader()) {
+                            bottom.setBackground(new Background(new BackgroundFill(Defaults.BG_COLOR_LEADER, null, null)));
+                            try {
+                                //si es el lider enviar un mensaje al resto
+                                LOG.info("Leader notifica a todos que habiliten sus pantallas.");
+                                _raftNode.sendMessage(CommandEnum.HABILITAR_PANTALLA.getCommand());
+                            } catch (Exception ex) {
+                                Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }else{
+                            bottom.setBackground(new Background(new BackgroundFill(Defaults.PANE_COLOR, null, null)));
+                        }
                         statusRaftLbl.setText(
                                 MessageFormat.format(TITLE_BASE, _raftNode.getId(), evt.getRole().toString()));
                     }
             );
+
         }
     }
 
@@ -225,25 +233,25 @@ public class FXMLController implements Initializable {
                     () -> {
                         gc.setLineWidth(evt.getShape().getWidth());
                         gc.setStroke(Color.web(evt.getShape().getColorRgb(), 1));
-                        gc.strokeLine(evt.getShape().getStartX(), 
-                                evt.getShape().getStartY(), 
+                        gc.strokeLine(evt.getShape().getStartX(),
+                                evt.getShape().getStartY(),
                                 evt.getShape().getEndX(), evt.getShape().getEndY());
                     }
             );
         }
     }
-    
+
     @Subscribe
     public void changedCommand(final CommandEvent evt) {
         if (evt != null) {
             LOG.info("Se recivio un comando desde el bus: ");
             Platform.runLater(
                     () -> {
-                        switch(evt.getCommand()){
+                        switch (evt.getCommand()) {
                             case HABILITAR_PANTALLA:
                                 LOG.info("Habilitando pantalla en el nodo cliente.");
                                 canvasPane.setDisable(false);
-                                break;  
+                                break;
                         }
                     }
             );

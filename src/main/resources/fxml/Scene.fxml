@@ -17,7 +17,7 @@
 
 <AnchorPane id="AnchorPane" maxHeight="Infinity" maxWidth="Infinity" prefHeight="632" prefWidth="725" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.utpl.pizarrafx.FXMLController">
     <children>
-        <BorderPane fx:id="borderPane">
+        <BorderPane id="boderPane" fx:id="borderPane">
             <top>
                 <VBox fx:id="top" prefHeight="135.0">
                     <children>
@@ -49,7 +49,7 @@
                                         <ColorPicker id="backColorPicker" fx:id="backColorPicker" onAction="#updateBackgroundToCanvas" prefWidth="103.0" GridPane.rowIndex="1" />
                                         <Button id="btnClean" mnemonicParsing="false" onAction="#handleButtonClear" text="Clear all" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                         <Label id="backLabel" fx:id="foreLabel" text="Color de pincel" GridPane.columnIndex="2" />
-                                        <ColorPicker id="foreColorPicker" fx:id="foreColorPicker"  prefWidth="103.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <ColorPicker id="foreColorPicker" fx:id="foreColorPicker" prefWidth="103.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                     </children>
                                 </GridPane>
                             </children>
@@ -61,7 +61,7 @@
                 <Canvas fx:id="canvasPane" height="450.0" onMouseMoved="#updateLocationFromCanvas" onScroll="#updateSliderFromCanvas" width="725.0" />
             </center>
             <bottom>
-                <HBox fx:id="bottom" alignment="TOP_CENTER" prefHeight="50">
+                <HBox id="hBoxStatus" fx:id="bottom" alignment="TOP_CENTER" prefHeight="50">
                     <children>
                         <HBox fx:id="zoomPanel">
                             <children>
