@@ -37,6 +37,7 @@ public class RaftNode extends ReceiverAdapter {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final EventBus _eventBus;
     private JChannel _ch;
+    private String _id;
 
     @Inject
     public RaftNode(EventBus eventBus) {
@@ -44,14 +45,15 @@ public class RaftNode extends ReceiverAdapter {
     }
 
     public Future<String> initialize(String id) {
+        this._id = id;
         return executor.submit(() -> {
-            LOG.info("Iniciando nodo raft para el id: {}", id);
+            LOG.info("Iniciando nodo raft para el id: {}", this._id);
             this._eventBus.post("String Event desde el servidor");
             _ch = new JChannel("src/main/resources/config/raft.xml");
             _ch.setReceiver(this);
             rsm = new ReplicatedStateMachine<>(_ch);
             RaftHandle handle = new RaftHandle(_ch, rsm);
-            handle.raftId(id);
+            handle.raftId(this._id);
 
             rsm.addRoleChangeListener((Role role) -> {
                 _eventBus.post(new RoleEvent(role));
@@ -126,5 +128,9 @@ public class RaftNode extends ReceiverAdapter {
 
     public boolean exists(String key) {
         return get(key) != null;
+    }
+    
+    public String getId(){
+        return this._id;
     }
 }

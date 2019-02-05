@@ -38,6 +38,7 @@
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     </columnConstraints>
                                     <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -46,7 +47,9 @@
                                     <children>
                                         <Label id="backLabel" fx:id="backLabel" text="Background" />
                                         <ColorPicker id="backColorPicker" fx:id="backColorPicker" onAction="#updateBackgroundToCanvas" prefWidth="103.0" GridPane.rowIndex="1" />
-                              <Button id="btnClean" mnemonicParsing="false" onAction="#handleButtonClear" text="Clear all" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <Button id="btnClean" mnemonicParsing="false" onAction="#handleButtonClear" text="Clear all" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <Label id="backLabel" fx:id="foreLabel" text="Color de pincel" GridPane.columnIndex="2" />
+                                        <ColorPicker id="foreColorPicker" fx:id="foreColorPicker"  prefWidth="103.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                     </children>
                                 </GridPane>
                             </children>

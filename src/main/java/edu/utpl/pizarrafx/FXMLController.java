@@ -15,6 +15,7 @@ import edu.utpl.pizarrafx.raft.RaftNode;
 import edu.utpl.pizarrafx.services.UtilConfig;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -50,7 +51,7 @@ import org.apache.logging.log4j.LogManager;
 public class FXMLController implements Initializable {
 
     private static final org.apache.logging.log4j.Logger LOG = LogManager.getLogger(FXMLController.class);
-    private final String TITLE_BASE = "Estado actual: ";
+    private final String TITLE_BASE = "Estado actual: {0}-{1}";
 
     @FXML
     private HBox hboxNodes;
@@ -101,6 +102,9 @@ public class FXMLController implements Initializable {
 
     @FXML
     private ColorPicker backColorPicker;
+    
+    @FXML
+    private ColorPicker foreColorPicker;
 
     //atributos propios para el canvas
     private double locationX = 0.0;
@@ -126,7 +130,7 @@ public class FXMLController implements Initializable {
         Line line = new Line();
         canvasPane.setOnMousePressed(e -> {
             gc.setLineWidth(Properties.getWidth());
-            gc.setStroke(Color.BLACK); //se puede hacer dinamico ese paso
+            gc.setStroke(foreColorPicker.getValue()); //se puede hacer dinamico ese paso
             line.setStartX(e.getX());
             line.setStartY(e.getY());
         });
@@ -148,7 +152,7 @@ public class FXMLController implements Initializable {
 
             try {
                 this._raftNode.put("Linea",
-                        new ShapeLine(Color.BLACK.toString(),
+                        new ShapeLine(foreColorPicker.getValue().toString(),
                                 line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), Properties.getWidth()));
             } catch (Exception ex) {
                 Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
@@ -206,8 +210,8 @@ public class FXMLController implements Initializable {
             }
             Platform.runLater(
                     () -> {
-                        statusRaftLbl.setText(TITLE_BASE + evt.getRole().toString());
-                        //coregir donde presentar el estado actual del nodo RAFT
+                        statusRaftLbl.setText(
+                                MessageFormat.format(TITLE_BASE, _raftNode.getId(), evt.getRole().toString()));
                     }
             );
         }
