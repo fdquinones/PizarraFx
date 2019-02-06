@@ -5,27 +5,38 @@
     <Console name="STDOUT" target="SYSTEM_OUT">
       <PatternLayout pattern="%highlight{[%-5level] - [%t] - .%c{1}: %msg%n}"/>
     </Console>
-    <File name="FILE" fileName="logs/Pizarra.log">
+
+
+	 <!-- Rolling File Appender -->
+    <RollingFile name="RollingFile">
+      <FileName>logs/pizarra.log</FileName>
+      <FilePattern>logs/time-based-logs/%d{yyyy-MM-dd-hh-mm}.log.zip</FilePattern>
       <PatternLayout>
-        <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+        <Pattern>%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} - %msg%n</Pattern>
       </PatternLayout>
-    </File>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="2" modulate="true" />
+      </Policies>
+      <DefaultRolloverStrategy max="5" />
+    </RollingFile>
+	
   </Appenders>
   <Loggers>
     <Root level="INFO">
-      <AppenderRef ref="FILE" level="INFO"/>
+      <AppenderRef ref="RollingFile" level="INFO"/>
       <AppenderRef ref="STDOUT" level="INFO"/>
     </Root>
 	<Logger name="org.jgroups" level="WARN">
 		 <AppenderRef ref="STDOUT" level="WARN"/>
-		 <AppenderRef ref="FILE" level="ALL"/>
+		 <AppenderRef ref="RollingFile" level="ALL"/>
 	</Logger>
 	<Logger name="org.jgroups.protocols.raft.RAFT"     level="ALL">
 		<AppenderRef ref="STDOUT" level="DEBUG"/>
-		<AppenderRef ref="FILE" level="ALL"/>
+		<AppenderRef ref="RollingFile" level="ALL"/>
 	</Logger>
 	<Logger name="org.jgroups.protocols.raft.ELECTION" level="ALL">
-		<AppenderRef ref="FILE" level="ALL"/>
+		<AppenderRef ref="RollingFile" level="ALL"/>
+		 <AppenderRef ref="STDOUT" level="DEBUG"/>
 	</Logger>
   </Loggers>
 </Configuration>
