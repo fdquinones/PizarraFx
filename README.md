@@ -6,8 +6,8 @@ La pizarra ofrece la siguientes caracteristicas
     Implementada bajo el algoritmo robusto de raft
     Utiliza la implementacion de jgroups raft
     Usa multicast para descubrir los nodos en la red
-    Usa el archivo de configuracion log4j2.xml para la parametrizacion de logs
-    Usa el archivo de configuracion raft.xml para parametrizar los tiempos de eleccion de leader, multicast, etc.
+    Usa el archivo de configuración log4j2.xml para la parametrizacion de logs
+    Usa el archivo de configuración raft.xml para parametrizar los tiempos de elección de leader, multicast, etc.
     
 Esta app fue desarrollada utilizando como editor *Netbeans*. Se debe construir el proyecto utilizando las dependencias, para ello utilizar la herramienta propia de netbeans.
 
