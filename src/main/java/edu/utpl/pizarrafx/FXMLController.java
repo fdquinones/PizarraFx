@@ -182,7 +182,7 @@ public class FXMLController implements Initializable {
                 } else {
                     canvasPane.setDisable(true);
                 }
-                System.out.println("Scheduling: " + System.nanoTime());
+                //System.out.println("Scheduling: " + System.nanoTime());
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 LOG.error(e.getMessage());
