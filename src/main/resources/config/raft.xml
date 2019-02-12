@@ -21,7 +21,7 @@
     <MFC max_credits="2M" min_threshold="0.4"/>
     <FRAG2 frag_size="60K"  />
     <raft.ELECTION election_min_interval="100" election_max_interval="5000"/> 
-    <raft.RAFT members="A,B,C,D" raft_id="${raft_id:undefined}"/>            
+    <raft.RAFT members="A,B,C,D,E,F" raft_id="${raft_id:undefined}"/>            
     <raft.REDIRECT/>                                                         
     <raft.CLIENT bind_addr="0.0.0.0" />                                  
 </config>
