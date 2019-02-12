@@ -20,6 +20,10 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -127,7 +131,7 @@ public class FXMLController implements Initializable {
 
     private void setupCanvas() {
         //se establece un color aleatorio para cada pincel de canvas
-        foreColorPicker.setValue(Utils.getRamdomColor());
+        foreColorPicker.setValue(Utils.getRamdomColorPreset());
         //por defecto se desabilita el panel hasta no tener un leader
         canvasPane.setDisable(true);
         gc = canvasPane.getGraphicsContext2D();
@@ -163,6 +167,41 @@ public class FXMLController implements Initializable {
                 Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+
+        //para verificar cada 2 segundos si la pantalla ya esta activa
+        this.startTaskFindLeader();
+
+    }
+
+    public void runTask() {
+        while (true) {
+            try {
+                if (this._raftNode.getLeaderInfo() != null) {
+                    LOG.info("YA EXISTE LEDER SE ACTIVA LA PANTALLA - >");
+                    canvasPane.setDisable(false);
+                } else {
+                    canvasPane.setDisable(true);
+                }
+                System.out.println("Scheduling: " + System.nanoTime());
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                LOG.error(e.getMessage());
+            }
+        }
+    }
+
+    public void startTaskFindLeader() {
+        // Create a Runnable
+        Runnable task = () -> {
+            runTask();
+        };
+
+        // Run the task in a background thread
+        Thread backgroundThread = new Thread(task);
+        // Terminate the running thread if the application exits
+        backgroundThread.setDaemon(true);
+        // Start the thread
+        backgroundThread.start();
     }
 
     @FXML
@@ -214,7 +253,7 @@ public class FXMLController implements Initializable {
                             } catch (Exception ex) {
                                 Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                        }else{
+                        } else {
                             bottom.setBackground(new Background(new BackgroundFill(Defaults.PANE_COLOR, null, null)));
                         }
                         statusRaftLbl.setText(

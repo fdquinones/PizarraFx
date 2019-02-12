@@ -21,6 +21,7 @@ import org.jgroups.raft.blocks.ReplicatedStateMachine;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jgroups.Address;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.View;
@@ -38,6 +39,7 @@ public class RaftNode extends ReceiverAdapter {
     private final EventBus _eventBus;
     private JChannel _ch;
     private String _id;
+    private RaftHandle _handle;
 
     @Inject
     public RaftNode(EventBus eventBus) {
@@ -52,8 +54,8 @@ public class RaftNode extends ReceiverAdapter {
             _ch = new JChannel("src/main/resources/config/raft.xml");
             _ch.setReceiver(this);
             rsm = new ReplicatedStateMachine<>(_ch);
-            RaftHandle handle = new RaftHandle(_ch, rsm);
-            handle.raftId(this._id);
+            _handle = new RaftHandle(_ch, rsm);
+            _handle.raftId(this._id);
 
             rsm.addRoleChangeListener((Role role) -> {
                 _eventBus.post(new RoleEvent(role));
@@ -84,6 +86,9 @@ public class RaftNode extends ReceiverAdapter {
             } catch (Exception e) {
                 System.out.println("Error al arrancar raft node: " + e.getMessage());
             }
+            
+            //Con este estado se inicializa siempre, esto para evitar que no se presente la informacion
+            _eventBus.post(new RoleEvent(Role.Follower));
 
             Thread.sleep(1000);
             return "Proceso completado";
@@ -132,5 +137,9 @@ public class RaftNode extends ReceiverAdapter {
     
     public String getId(){
         return this._id;
+    }
+    
+    public Address getLeaderInfo(){
+        return this._handle != null ?  this._handle.leader() : null;
     }
 }
